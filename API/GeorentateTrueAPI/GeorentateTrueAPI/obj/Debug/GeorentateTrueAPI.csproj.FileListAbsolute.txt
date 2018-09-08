@@ -1,0 +1,7 @@
+c:\users\zilvinas tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\bin\Debug\GeorentateTrueAPI.exe.config
+c:\users\zilvinas tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\bin\Debug\GeorentateTrueAPI.exe
+c:\users\zilvinas tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\bin\Debug\GeorentateTrueAPI.pdb
+c:\users\zilvinas tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\obj\Debug\GeorentateTrueAPI.csproj.CoreCompileInputs.cache
+c:\users\zilvinas tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\obj\Debug\GeorentateTrueAPI.exe
+c:\users\zilvinas tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\obj\Debug\GeorentateTrueAPI.pdb
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\obj\Debug\GeorentateTrueAPI.csprojResolveAssemblyReference.cache

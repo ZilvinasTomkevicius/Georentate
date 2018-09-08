@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="45dp">
+
+            <EditText
+                android:id="@+id/createLoginInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sign_up_border"
+                android:textColor="@color/colorPrimaryDark"
+                android:padding="10dp"
+                android:elevation="4dp"
+                android:hint="Create login"
+                android:textColorHint="@color/colorPrimaryDark"/>
+
+            <EditText
+                android:id="@+id/createEmailInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sign_up_border"
+                android:textColor="@color/colorPrimaryDark"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                android:elevation="4dp"
+                android:hint="Enter email"
+                android:textColorHint="@color/colorPrimaryDark"/>
+
+            <EditText
+                android:id="@+id/createPasswordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sign_up_border"
+                android:textColor="@color/colorPrimaryDark"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                android:elevation="4dp"
+                android:hint="Create password"
+                android:inputType="textPassword"
+                android:textColorHint="@color/colorPrimaryDark"/>
+
+            <EditText
+                android:id="@+id/createPasswordInputRep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sign_up_border"
+                android:textColor="@color/colorPrimaryDark"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                android:elevation="4dp"
+                android:hint="Confirm password"
+                android:inputType="textPassword"
+                android:textColorHint="@color/colorPrimaryDark"/>
+
+            <CheckBox
+                android:id="@+id/loginAfterCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:backgroundTint="#fff"
+                android:buttonTint="#fff"
+                android:drawableTint="#fff"
+                android:text="Login after creating an account" />
+
+            <Button
+                android:id="@+id/signUpBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:text="Sign up"
+                android:textColor="#fff"
+                android:elevation="6dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/signUpProgressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="293dp"
+        android:indeterminateTint="#fff"/>
+</RelativeLayout>

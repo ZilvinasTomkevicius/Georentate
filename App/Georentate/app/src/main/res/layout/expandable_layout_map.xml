@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/scan_textView_click"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="Scan"
+                android:textAllCaps="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="15dp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/colorAccent"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"/>
+
+            <TextView
+                android:id="@+id/completed_expandable_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="Completed"
+                android:textAllCaps="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/colorAccent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hint"
+                android:textAllCaps="true"
+                android:textColor="#fff"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
+                android:fontFamily="sans-serif-light"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/checkpoint_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#fff"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:fontFamily="sans-serif-light"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#fff"
+            android:layout_margin="10dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

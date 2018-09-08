@@ -1,0 +1,6 @@
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\bin\Release\GeorentateTrueAPI.exe.config
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\bin\Release\GeorentateTrueAPI.exe
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\bin\Release\GeorentateTrueAPI.pdb
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\obj\Release\GeorentateTrueAPI.csproj.CoreCompileInputs.cache
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\obj\Release\GeorentateTrueAPI.exe
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\GeorentateTrueAPI\obj\Release\GeorentateTrueAPI.pdb

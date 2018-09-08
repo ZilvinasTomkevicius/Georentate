@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginBottom="5dp">
+
+            <EditText
+                android:id="@+id/loginInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_border"
+                android:padding="10dp"
+                android:hint="Login"
+                android:textColorHint="#fff"
+                android:inputType="text"
+                android:fontFamily="sans-serif-light"
+                android:textColor="#fff"
+                android:elevation="6dp"/>
+
+            <EditText
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_border"
+                android:padding="10dp"
+                android:hint="Password"
+                android:textColorHint="#fff"
+                android:inputType="textPassword"
+                android:fontFamily="sans-serif-light"
+                android:textColor="#fff"
+                android:elevation="6dp"
+                android:layout_marginTop="5dp"/>
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/rememberCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:backgroundTint="#fff"
+            android:buttonTint="#fff"
+            android:drawableTint="#fff"
+            android:text="Remember"
+            android:layout_marginLeft="40dp"/>
+
+        <Button
+            android:id="@+id/loginBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textColor="@color/colorAccent"
+            android:background="#fff"
+            android:layout_marginRight="45dp"
+            android:layout_marginLeft="45dp"
+            android:elevation="6dp"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/loginProgressBar"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="183dp"/>
+
+</RelativeLayout>

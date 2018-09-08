@@ -1,0 +1,6 @@
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\ClassLibrary\bin\Release\ClassLibrary.dll.config
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\ClassLibrary\bin\Release\ClassLibrary.dll
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\ClassLibrary\bin\Release\ClassLibrary.pdb
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\ClassLibrary\obj\Release\ClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\ClassLibrary\obj\Release\ClassLibrary.dll
+C:\Users\Zilvinas Tomkevicius\source\repos\GeorentateTrueAPI\ClassLibrary\obj\Release\ClassLibrary.pdb
