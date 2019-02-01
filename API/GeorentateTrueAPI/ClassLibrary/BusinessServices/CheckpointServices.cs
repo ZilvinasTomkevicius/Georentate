@@ -33,12 +33,12 @@ namespace ClassLibrary.BusinessServices
                     SqlCommand cmd = new SqlCommand("insert into [Checkpoint]([Name], Scan, Hint, Latitude, Longitude, Points) values (@Name, @Scan, @Hint, @Latitude," +
                         "@Longitude, @Points)", con, tr);
                     cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.AddWithValue("@Name", checkpoint.Name);
-                    cmd.Parameters.AddWithValue("@Scan", checkpoint.Scan);
-                    cmd.Parameters.AddWithValue("@Hint", checkpoint.Hint);
-                    cmd.Parameters.AddWithValue("@Latitude", checkpoint.Latitude);
-                    cmd.Parameters.AddWithValue("@Longitude", checkpoint.Longitude);
-                    cmd.Parameters.AddWithValue("@Points", checkpoint.Points);
+                    cmd.Parameters.AddWithValue("@Name", checkpoint.name);
+                    cmd.Parameters.AddWithValue("@Scan", checkpoint.scan);
+                    cmd.Parameters.AddWithValue("@Hint", checkpoint.hint);
+                    cmd.Parameters.AddWithValue("@Latitude", checkpoint.latitude);
+                    cmd.Parameters.AddWithValue("@Longitude", checkpoint.longitude);
+                    cmd.Parameters.AddWithValue("@Points", checkpoint.points);
 
                     cmd.ExecuteNonQuery();
 
@@ -64,13 +64,13 @@ namespace ClassLibrary.BusinessServices
                     SqlCommand cmd = new SqlCommand("update [Checkpoint] set [Name] = @Name, Scan = @Scan, Hint = @Hint, Latitude = @Latitude, " +
                         "Longitude = @Longitude, Points = @Points where ID = @ID", con, tr);
                     cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.AddWithValue("@ID", checkpoint.ID);
-                    cmd.Parameters.AddWithValue("@Name", checkpoint.Name);
-                    cmd.Parameters.AddWithValue("@Scan", checkpoint.Scan);
-                    cmd.Parameters.AddWithValue("@Hint", checkpoint.Hint);
-                    cmd.Parameters.AddWithValue("@Latitude", checkpoint.Latitude);
-                    cmd.Parameters.AddWithValue("@Longitude", checkpoint.Longitude);
-                    cmd.Parameters.AddWithValue("@Points", checkpoint.Points);
+                    cmd.Parameters.AddWithValue("@ID", checkpoint.id);
+                    cmd.Parameters.AddWithValue("@Name", checkpoint.name);
+                    cmd.Parameters.AddWithValue("@Scan", checkpoint.scan);
+                    cmd.Parameters.AddWithValue("@Hint", checkpoint.hint);
+                    cmd.Parameters.AddWithValue("@Latitude", checkpoint.latitude);
+                    cmd.Parameters.AddWithValue("@Longitude", checkpoint.longitude);
+                    cmd.Parameters.AddWithValue("@Points", checkpoint.points);
 
                     cmd.ExecuteNonQuery();
 
@@ -114,13 +114,13 @@ namespace ClassLibrary.BusinessServices
 
                 while (reader.Read())
                 {
-                    checkpoint.ID = reader.GetInt32(0);
-                    checkpoint.Name = reader.GetString(1);
-                    checkpoint.Scan = reader.GetString(2);
-                    checkpoint.Hint = reader.GetString(3);
-                    checkpoint.Latitude = reader.GetDouble(4);
-                    checkpoint.Longitude = reader.GetDouble(5);
-                    checkpoint.Points = reader.GetInt32(6);
+                    checkpoint.id = reader.GetInt32(0);
+                    checkpoint.name = reader.GetString(1);
+                    checkpoint.scan = reader.GetString(2);
+                    checkpoint.hint = reader.GetString(3);
+                    checkpoint.latitude = reader.GetDouble(4);
+                    checkpoint.longitude = reader.GetDouble(5);
+                    checkpoint.points = Convert.ToDouble(reader["Points"]);
                 }
 
                 reader.Close();
@@ -147,13 +147,13 @@ namespace ClassLibrary.BusinessServices
                 {
                     Checkpoint checkpoint = new Checkpoint();
 
-                    checkpoint.ID = reader.GetInt32(0);
-                    checkpoint.Name = reader.GetString(1);
-                    checkpoint.Scan = reader.GetString(2);
-                    checkpoint.Hint = reader.GetString(3);
-                    checkpoint.Latitude = reader.GetDouble(4);
-                    checkpoint.Longitude = reader.GetDouble(5);
-                    checkpoint.Points = reader.GetInt32(6);
+                    checkpoint.id = reader.GetInt32(0);
+                    checkpoint.name = reader.GetString(1);
+                    checkpoint.scan = reader.GetString(2);
+                    checkpoint.hint = reader.GetString(3);
+                    checkpoint.latitude = reader.GetDouble(4);
+                    checkpoint.longitude = reader.GetDouble(5);
+                    checkpoint.points = Convert.ToDouble(reader["Points"]);
 
                     checkpointList.Add(checkpoint);
                 }

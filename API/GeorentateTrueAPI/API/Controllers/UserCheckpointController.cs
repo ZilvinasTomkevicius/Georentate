@@ -56,6 +56,28 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// UserCheckpoint.UpdateList
+        /// </summary>
+        /// <param name="userCheckpoint"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("api/userCheckpoint/updateList")]
+        public HttpResponseMessage UpdateList(List<UserCheckpoint> userCheckpoint)
+        {
+            try
+            {
+                userCheckpointServices.UpdateList(userCheckpoint);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        /// <summary>
         /// UserCheckpoint.Delete
         /// </summary>
         /// <param name="uid"></param>

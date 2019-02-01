@@ -11,6 +11,7 @@ namespace ClassLibrary.BusinessServices
     {
         void Add(List<UserCheckpoint> checkpointList);
         void Update(UserCheckpoint checkpoint);
+        void UpdateList(List<UserCheckpoint> userCheckpoints);
         void Delete(int udi, int cid);
         UserCheckpoint Get(int udi, int cid);
         List<UserCheckpoint> GetList(int id);

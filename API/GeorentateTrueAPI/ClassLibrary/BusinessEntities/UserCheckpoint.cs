@@ -8,15 +8,15 @@ namespace ClassLibrary.BusinessEntities
 {
     public class UserCheckpoint
     {
-        public int UserID { get; set; }
-        public int CheckpointID { get; set; }
-        public bool Completed { get; set; }
+        public int userID { get; set; }
+        public int checkpointID { get; set; }
+        public bool completed { get; set; }
 
         public UserCheckpoint(int userid, int checkpointid, bool completed)
         {
-            UserID = userid;
-            CheckpointID = checkpointid;
-            Completed = completed;
+            this.userID = userid;
+            this.checkpointID = checkpointid;
+            this.completed = completed;
         }
 
         public UserCheckpoint()

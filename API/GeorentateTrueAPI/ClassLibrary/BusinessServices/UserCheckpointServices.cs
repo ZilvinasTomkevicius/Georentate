@@ -34,9 +34,9 @@ namespace ClassLibrary.BusinessServices
 
                         SqlCommand cmd = new SqlCommand("insert into UserCheckpoint (UserID, CheckpointID, Completed) values (@UserID, @CheckpointID, @Completed)", con, tr);
                         cmd.CommandType = CommandType.Text;
-                        cmd.Parameters.AddWithValue("@UserID", checkpoint.UserID);
-                        cmd.Parameters.AddWithValue("@CheckpointID", checkpoint.CheckpointID);
-                        cmd.Parameters.AddWithValue("@Completed", checkpoint.Completed);
+                        cmd.Parameters.AddWithValue("@UserID", checkpoint.userID);
+                        cmd.Parameters.AddWithValue("@CheckpointID", checkpoint.checkpointID);
+                        cmd.Parameters.AddWithValue("@Completed", checkpoint.completed);
 
                         cmd.ExecuteNonQuery();
 
@@ -62,13 +62,44 @@ namespace ClassLibrary.BusinessServices
 
                     SqlCommand cmd = new SqlCommand("update UserCheckpoint set Completed = @Completed where UserID = @UserID and CheckpointID = @CheckpointID", con, tr);
                     cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.AddWithValue("@UserID", checkpoint.UserID);
-                    cmd.Parameters.AddWithValue("@CheckpointID", checkpoint.CheckpointID);
-                    cmd.Parameters.AddWithValue("@Completed", checkpoint.Completed);
+                    cmd.Parameters.AddWithValue("@UserID", checkpoint.userID);
+                    cmd.Parameters.AddWithValue("@CheckpointID", checkpoint.checkpointID);
+                    cmd.Parameters.AddWithValue("@Completed", checkpoint.completed);
 
                     cmd.ExecuteNonQuery();
 
                     tr.Commit();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+            }
+        }
+
+        public void UpdateList(List<UserCheckpoint> userCheckpoints)
+        {
+            using (SqlConnection con = new SqlConnection(this.connectionString))
+            {
+                try
+                {
+                    con.Open();
+
+                    foreach(UserCheckpoint checkpoint in userCheckpoints)
+                    {
+                        SqlTransaction tr = con.BeginTransaction();
+
+                        SqlCommand cmd = new SqlCommand("update UserCheckpoint set Completed = @Completed where UserID = @UserID and CheckpointID = @CheckpointID", con, tr);
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Parameters.AddWithValue("@UserID", checkpoint.userID);
+                        cmd.Parameters.AddWithValue("@CheckpointID", checkpoint.checkpointID);
+                        cmd.Parameters.AddWithValue("@Completed", checkpoint.completed);
+
+                        cmd.ExecuteNonQuery();
+
+                        tr.Commit();
+                    }
+                   
                 }
                 catch (Exception e)
                 {
@@ -110,9 +141,9 @@ namespace ClassLibrary.BusinessServices
 
                 while (reader.Read())
                 {
-                    checkpoint.UserID = reader.GetInt32(0);
-                    checkpoint.CheckpointID = reader.GetInt32(1);
-                    checkpoint.Completed = reader.GetBoolean(2);                  
+                    checkpoint.userID = reader.GetInt32(0);
+                    checkpoint.checkpointID = reader.GetInt32(1);
+                    checkpoint.completed = reader.GetBoolean(2);                  
                 }
 
                 reader.Close();
@@ -140,9 +171,9 @@ namespace ClassLibrary.BusinessServices
                 {
                     UserCheckpoint checkpoint = new UserCheckpoint();
 
-                    checkpoint.UserID = reader.GetInt32(0);
-                    checkpoint.CheckpointID = reader.GetInt32(1);
-                    checkpoint.Completed = reader.GetBoolean(2);
+                    checkpoint.userID = reader.GetInt32(0);
+                    checkpoint.checkpointID = reader.GetInt32(1);
+                    checkpoint.completed = reader.GetBoolean(2);
 
                     checkpointList.Add(checkpoint);
                 }

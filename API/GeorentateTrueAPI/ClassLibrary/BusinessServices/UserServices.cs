@@ -20,6 +20,7 @@ namespace ClassLibrary.BusinessServices
 
         private SqlDataReader reader;
 
+        
         public int Add(User user)
         {
             int id = 0;
@@ -34,9 +35,9 @@ namespace ClassLibrary.BusinessServices
 
                     SqlCommand cmd = new SqlCommand("insert into [User](Login, Password, Email, Points) values (@Login, @Password, @Email, @Points)", con, tr);
                     cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.AddWithValue("@Login", user.Login);
-                    cmd.Parameters.AddWithValue("@Password", user.Password);
-                    cmd.Parameters.AddWithValue("@Email", user.Email);
+                    cmd.Parameters.AddWithValue("@Login", user.login);
+                    cmd.Parameters.AddWithValue("@Password", user.password);
+                    cmd.Parameters.AddWithValue("@Email", user.email);
                     cmd.Parameters.AddWithValue("@Points", 0);
 
                     cmd.ExecuteNonQuery();                
@@ -44,7 +45,7 @@ namespace ClassLibrary.BusinessServices
 
                     SqlCommand cmd2 = new SqlCommand("select ID, Login, Password, Email, RegisterDate, Points from [User] where [Login] = @Login", con);
                     cmd2.CommandType = CommandType.Text;
-                    cmd2.Parameters.AddWithValue("@Login", user.Login);
+                    cmd2.Parameters.AddWithValue("@Login", user.login);
 
                     reader = cmd2.ExecuteReader();
 
@@ -64,7 +65,7 @@ namespace ClassLibrary.BusinessServices
             }
          
         }
-
+        
         public void Update(User user)
         {
             using (SqlConnection con = new SqlConnection(this.connectionString))
@@ -77,11 +78,11 @@ namespace ClassLibrary.BusinessServices
 
                     SqlCommand cmd = new SqlCommand("update [User] set Login = @Login, Password=@Password, Email = @Email, Points = @Points where ID = @ID", con, tr);
                     cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.AddWithValue("@Login", user.Login);
-                    cmd.Parameters.AddWithValue("@Password", user.Password);
-                    cmd.Parameters.AddWithValue("@Email", user.Email);
-                    cmd.Parameters.AddWithValue("@Points", user.Points);
-                    cmd.Parameters.AddWithValue("@ID", user.ID);
+                    cmd.Parameters.AddWithValue("@Login", user.login);
+                    cmd.Parameters.AddWithValue("@Password", user.password);
+                    cmd.Parameters.AddWithValue("@Email", user.email);
+                    cmd.Parameters.AddWithValue("@Points", user.points);
+                    cmd.Parameters.AddWithValue("@ID", user.id);
 
                     cmd.ExecuteNonQuery();
 
@@ -93,14 +94,14 @@ namespace ClassLibrary.BusinessServices
                 }
             }
         }
-
+        
         public void Delete(int userID)
         {
             using (SqlConnection con = new SqlConnection(this.connectionString))
             {
                 con.Open();
 
-                SqlCommand cmd = new SqlCommand("delete from [User] where ID = @ID", con);
+                SqlCommand cmd = new SqlCommand("delete from [User] where id = @Id", con);
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.AddWithValue("@Id", userID);
 
@@ -124,12 +125,12 @@ namespace ClassLibrary.BusinessServices
 
                 while (reader.Read())
                 {
-                    user.ID = reader.GetInt32(0);
-                    user.Login = reader.GetString(1);
-                    user.Password = reader.GetString(2);
-                    user.Email = reader.GetString(3);
-                    user.RegisterDate = reader.GetDateTime(4);
-                    user.Points = reader.GetInt32(5);
+                    user.id = reader.GetInt32(0);
+                    user.login = reader.GetString(1);
+                    user.password = reader.GetString(2);
+                    user.email = reader.GetString(3);
+                    user.registerDate = reader.GetDateTime(4);
+                    user.points = Convert.ToDouble(reader["points"]);
                 }
 
                 reader.Close();
@@ -155,12 +156,12 @@ namespace ClassLibrary.BusinessServices
                 {
                     User user= new User();
 
-                    user.ID = reader.GetInt32(0);
-                    user.Login = reader.GetString(1);
-                    user.Password = reader.GetString(2);
-                    user.Email = reader.GetString(3);
-                    user.RegisterDate = reader.GetDateTime(4);
-                    user.Points = reader.GetInt32(5);
+                    user.id = reader.GetInt32(0);
+                    user.login = reader.GetString(1);
+                    user.password = reader.GetString(2);
+                    user.email = reader.GetString(3);
+                    user.registerDate = reader.GetDateTime(4);
+                    user.points = Convert.ToDouble(reader["Points"]);
 
                     userList.Add(user);
                 }
@@ -170,7 +171,7 @@ namespace ClassLibrary.BusinessServices
                 return userList;
             }
         }      
-
+        
         public User LoggingOnUser(User user)
         {
             using (SqlConnection con = new SqlConnection(this.connectionString))
@@ -181,10 +182,10 @@ namespace ClassLibrary.BusinessServices
 
                 DataTable dataTable = new DataTable("Temp_User");
 
-                dataTable.Columns.Add("Login", typeof(string));
-                dataTable.Columns.Add("Password", typeof(string));
+                dataTable.Columns.Add("login", typeof(string));
+                dataTable.Columns.Add("password", typeof(string));
 
-                dataTable.Rows.Add(user.Login, user.Password);
+                dataTable.Rows.Add(user.login, user.password);
 
                 SqlCommand cmd = new SqlCommand("Logging_On_User", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -198,12 +199,12 @@ namespace ClassLibrary.BusinessServices
 
                 while (reader.Read())
                 {
-                    user1.ID = reader.GetInt32(0);
-                    user1.Login = reader.GetString(1);
-                    user1.Password = reader.GetString(2);
-                    user1.Email = reader.GetString(3);
-                    user1.RegisterDate = reader.GetDateTime(4);
-                    user1.Points = reader.GetInt32(5);
+                    user1.id = reader.GetInt32(0);
+                    user1.login = reader.GetString(1);
+                    user1.password = reader.GetString(2);
+                    user1.email = reader.GetString(3);
+                    user1.registerDate = reader.GetDateTime(4);
+                    user.points = Convert.ToDouble(reader["points"]);
                 }
 
                 reader.Close();

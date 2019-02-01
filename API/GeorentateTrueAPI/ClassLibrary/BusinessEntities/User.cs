@@ -8,21 +8,21 @@ namespace ClassLibrary.BusinessEntities
 {
     public class User
     {
-        public int ID { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public DateTime RegisterDate { get; set; }
-        public int Points { get; set; }
+        public int id { get; set; }
+        public string login { get; set; }
+        public string password { get; set; }
+        public string email { get; set; }
+        public DateTime registerDate { get; set; }
+        public double points { get; set; }
 
-        public User(int id, string login, string password, string email, DateTime registerDate, int points)
+        public User(int id, string login, string password, string email, DateTime registerDate, double points)
         {
-            ID = id;
-            Login = login;
-            Password = password;
-            Email = email;
-            RegisterDate = registerDate;
-            Points = points;
+            this.id = id;
+            this.login = login;
+            this.password = password;
+            this.email = email;
+            this.registerDate = registerDate;
+            this.points = points;
         }
 
         public User()

@@ -8,23 +8,23 @@ namespace ClassLibrary.BusinessEntities
 {
     public class Checkpoint
     {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public string Scan { get; set; }
-        public string Hint { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public int Points { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string scan { get; set; }
+        public string hint { get; set; }
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+        public double points { get; set; }
 
-        public Checkpoint(int id, string name, string scan, string hint, double latitude, double longitude, int points)
+        public Checkpoint(int id, string name, string scan, string hint, double latitude, double longitude, double points)
         {
-            ID = id;
-            Name = name;
-            Scan = scan;
-            Hint = hint;
-            Latitude = latitude;
-            Longitude = longitude;
-            Points = points;
+            this.id = id;
+            this.name = name;
+            this.scan = scan;
+            this.hint = hint;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.points = points;
         }
 
         public Checkpoint()
