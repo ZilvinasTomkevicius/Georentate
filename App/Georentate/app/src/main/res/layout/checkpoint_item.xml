@@ -33,8 +33,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif-light"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_gravity="center_horizontal"
+            android:textColor="@color/primaryText"
             android:layout_margin="2dp"
             />
 
@@ -44,7 +43,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
             android:text="20pts"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/secondaryText"
             android:textSize="15sp"
             android:layout_margin="2dp"/>
 

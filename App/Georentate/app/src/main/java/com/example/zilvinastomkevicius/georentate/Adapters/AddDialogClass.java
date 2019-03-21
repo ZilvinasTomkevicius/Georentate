@@ -82,39 +82,38 @@ public class AddDialogClass extends Dialog implements android.view.View.OnClickL
     public void addCheckpoint() {
         if(checkInputs()) {
             Checkpoint checkpoint = new Checkpoint();
-            checkpoint.Name = mNameInput.getText().toString();
-            checkpoint.Hint = mHintInput.getText().toString();
-            checkpoint.Scan = mScanInput.getText().toString();
-            checkpoint.Points = Integer.parseInt(mPointsInput.getText().toString());
-            checkpoint.Latitude = mLatLng.latitude;
-            checkpoint.Longitude = mLatLng.longitude;
+            checkpoint.setName(mNameInput.getText().toString());
+            checkpoint.setHint(mHintInput.getText().toString());
+            checkpoint.setScan(mScanInput.getText().toString());
+            checkpoint.setPoints(Integer.parseInt(mPointsInput.getText().toString()));
+            checkpoint.setLatitude(mLatLng.latitude);
+            checkpoint.setLongitude(mLatLng.longitude);
 
             CheckpointClients checkpointClients = new CheckpointClients(getContext());
             checkpointClients.addCheckpoint(checkpoint);
 
             CheckpointObj.NEW_CHECKPOINTS = true;
-            CheckpointObj.newCheckpointList.add(checkpoint.Name);
+            CheckpointObj.newCheckpointList.add(checkpoint.getName());
         }
     }
 
     public boolean checkInputs() {
         if(mNameInput.getText().toString().equals("")) {
-            Toast.makeText(getContext(), "Enter name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Įvesti pavadinimą", Toast.LENGTH_SHORT).show();
             return false;
         }
         if(mHintInput.getText().toString().equals("")) {
-            Toast.makeText(getContext(), "Enter hint", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Įvesti užuominą", Toast.LENGTH_SHORT).show();
             return false;
         }
         if(mScanInput.getText().toString().equals("")) {
-            Toast.makeText(getContext(), "Enter scan string", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Įvesti skenavimo raktą", Toast.LENGTH_SHORT).show();
             return false;
         }
         if(mPointsInput.getText().toString().equals("")) {
-            Toast.makeText(getContext(), "Enter points", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Įvesti taškus", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         return true;
     }
 }

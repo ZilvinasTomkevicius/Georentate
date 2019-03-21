@@ -2,57 +2,49 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/white_border"
+    android:layout_margin="3dp"
+    android:elevation="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#fff"
         android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/scan_textView_click"
+            <LinearLayout
+                android:id="@+id/scan_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_alignParentRight="true"
-                android:text="Scan"
-                android:textAllCaps="true"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginBottom="15dp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorAccent"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?android:attr/selectableItemBackground"/>
+                android:layout_margin="15dp"
+                android:clickable="true">
 
-            <TextView
-                android:id="@+id/completed_expandable_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="Completed"
-                android:textAllCaps="true"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginBottom="15dp"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorAccent"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_center_focus_strong_black_24dp"
+                    android:layout_marginLeft="5dp"/>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hint"
+                android:text="Užuomina"
                 android:textAllCaps="true"
-                android:textColor="#fff"
+                android:textColor="@color/primaryText"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:layout_marginLeft="15dp"
-                android:fontFamily="sans-serif-light"/>
+                android:fontFamily="sans-serif-light"
+                android:textStyle="bold"/>
 
         </RelativeLayout>
 
@@ -61,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""
-            android:textColor="#fff"
+            android:textColor="@color/secondaryText"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:fontFamily="sans-serif-light"
@@ -70,7 +62,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#fff"
+            android:background="@color/dividerColor"
             android:layout_margin="10dp"/>
 
     </LinearLayout>

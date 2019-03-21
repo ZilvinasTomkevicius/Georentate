@@ -9,15 +9,6 @@
     android:weightSum="10"
     tools:context=".Activites.MainActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/mainToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:titleTextColor="#fff"
-        android:elevation="2dp">
-    </android.support.v7.widget.Toolbar>
-
     <android.support.v4.view.ViewPager
         android:layout_weight="10"
         android:id="@+id/fragmentContainer"
@@ -29,8 +20,8 @@
         android:id="@+id/mainTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabIndicatorColor="@color/colorPrimaryDark"
-        app:tabSelectedTextColor="@color/colorPrimaryDark">
+        app:tabIndicatorColor="@color/colorAccent"
+        app:tabSelectedTextColor="@color/colorAccent">
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"

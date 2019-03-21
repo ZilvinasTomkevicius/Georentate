@@ -53,10 +53,10 @@ public class EditDialogClass extends Dialog implements android.view.View.OnClick
         mPointsInput = findViewById(R.id.edit_checkpoint_points);
         mCloseIcon = findViewById(R.id.close_edit_dialog_ic);
 
-        mNameInput.setText(mCheckpoint.Name);
-        mHintInput.setText(mCheckpoint.Hint);
-        mScanInput.setText(mCheckpoint.Scan);
-        mPointsInput.setText(Integer.toString(mCheckpoint.Points));
+        mNameInput.setText(mCheckpoint.getName());
+        mHintInput.setText(mCheckpoint.getName());
+        mScanInput.setText(mCheckpoint.getScan());
+        mPointsInput.setText(Float.toString(mCheckpoint.getPoints()));
 
         mCloseIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,13 +83,13 @@ public class EditDialogClass extends Dialog implements android.view.View.OnClick
     public void updateCheckpoint() {
         if(checkInputs()) {
             Checkpoint checkpoint = new Checkpoint();
-            checkpoint.ID = mCheckpoint.ID;
-            checkpoint.Name = mNameInput.getText().toString();
-            checkpoint.Hint = mHintInput.getText().toString();
-            checkpoint.Scan = mScanInput.getText().toString();
-            checkpoint.Points = Integer.parseInt(mPointsInput.getText().toString());
-            checkpoint.Latitude = mCheckpoint.Latitude;
-            checkpoint.Longitude = mCheckpoint.Longitude;
+            checkpoint.setId(mCheckpoint.getId());
+            checkpoint.setName(mNameInput.getText().toString());
+            checkpoint.setHint(mHintInput.getText().toString());
+            checkpoint.setScan(mScanInput.getText().toString());
+            checkpoint.setPoints(Integer.parseInt(mPointsInput.getText().toString()));
+            checkpoint.setLatitude(mCheckpoint.getLatitude());
+            checkpoint.setLongitude(mCheckpoint.getLongitude());
 
             CheckpointClients checkpointClients = new CheckpointClients(getContext());
             checkpointClients.updateCheckpoint(checkpoint);
@@ -98,19 +98,19 @@ public class EditDialogClass extends Dialog implements android.view.View.OnClick
 
     public boolean checkInputs() {
         if(mNameInput.getText().toString().equals("")) {
-            Toast.makeText(getContext(), "Enter name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Įvesti naują pavadinimą", Toast.LENGTH_SHORT).show();
             return false;
         }
         if(mHintInput.getText().toString().equals("")) {
-            Toast.makeText(getContext(), "Enter hint", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Įvesti naują užuominą", Toast.LENGTH_SHORT).show();
             return false;
         }
         if(mScanInput.getText().toString().equals("")) {
-            Toast.makeText(getContext(), "Enter scan string", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Įvesti naują skenavimo raktą", Toast.LENGTH_SHORT).show();
             return false;
         }
         if(mPointsInput.getText().toString().equals("")) {
-            Toast.makeText(getContext(), "Enter points", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Įvesti naujus taškus", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -119,14 +119,14 @@ public class EditDialogClass extends Dialog implements android.view.View.OnClick
 
     public void updateAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Are you sure?");
-        builder.setPositiveButton("Yes", new OnClickListener() {
+        builder.setMessage("Patvirtinti?");
+        builder.setPositiveButton("Taip", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 updateCheckpoint();
             }
         });
-        builder.setNegativeButton("No", new OnClickListener() {
+        builder.setNegativeButton("Ne", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

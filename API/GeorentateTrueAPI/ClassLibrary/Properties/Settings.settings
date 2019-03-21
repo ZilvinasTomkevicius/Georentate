@@ -5,9 +5,9 @@
     <Setting Name="ConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=DESKTOP-KBSOB68;Initial Catalog=GeorentateTrue;Persist Security Info=True;User ID=ZILVINO SA;Password=kompolaidelis12&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;workstation id=georentate.mssql.somee.com;packet size=4096;user id=geor_SQLLogin_1;pwd=2q3p4sqtk8;data source=georentate.mssql.somee.com;persist security info=False;initial catalog=georentate&lt;/ConnectionString&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=DESKTOP-KBSOB68;Initial Catalog=GeorentateTrue;Persist Security Info=True;User ID=ZILVINO SA;Password=kompolaidelis12</Value>
+      <Value Profile="(Default)">workstation id=georentate.mssql.somee.com;packet size=4096;user id=geor_SQLLogin_1;pwd=2q3p4sqtk8;data source=georentate.mssql.somee.com;persist security info=False;initial catalog=georentate</Value>
     </Setting>
   </Settings>
 </SettingsFile>

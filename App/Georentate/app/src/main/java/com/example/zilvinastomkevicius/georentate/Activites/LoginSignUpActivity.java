@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -14,6 +17,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.zilvinastomkevicius.georentate.APIClients.AppInfoClients;
+import com.example.zilvinastomkevicius.georentate.APIClients.CheckpointClients;
+import com.example.zilvinastomkevicius.georentate.Entities.AppInfo;
 import com.example.zilvinastomkevicius.georentate.Entities.Checkpoint;
 import com.example.zilvinastomkevicius.georentate.Entities.User;
 import com.example.zilvinastomkevicius.georentate.Entities.UserCheckpoint;
@@ -24,6 +30,7 @@ import com.example.zilvinastomkevicius.georentate.Fragments.MessagesFragment;
 import com.example.zilvinastomkevicius.georentate.Fragments.ProfileFragment;
 import com.example.zilvinastomkevicius.georentate.Fragments.SettingsFragment;
 import com.example.zilvinastomkevicius.georentate.Fragments.SignUpFragment;
+import com.example.zilvinastomkevicius.georentate.GlobalObjects.AppInfoObj;
 import com.example.zilvinastomkevicius.georentate.GlobalObjects.CheckpointObj;
 import com.example.zilvinastomkevicius.georentate.GlobalObjects.UserObj;
 import com.example.zilvinastomkevicius.georentate.R;
@@ -43,6 +50,9 @@ public class LoginSignUpActivity extends AppCompatActivity {
     SectionsPagerAdapter sectionsPagerAdapter;
     ViewPager viewPager;
     TabLayout tabLayout;
+
+    private CheckpointClients checkpointClients;
+    private AppInfoClients appInfoClients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,15 +80,21 @@ public class LoginSignUpActivity extends AppCompatActivity {
 
             if(login != null) {
                 UserObj.USER = new User();
-                UserObj.USER.ID = sharedPreferences.getInt("ID", 0);
-                UserObj.USER.Login = login;
-                UserObj.USER.Email = sharedPreferences.getString("EMAIL", null);
-                UserObj.USER.Password = sharedPreferences.getString("PASSWORD", null);
-                UserObj.USER.RegisterDate = sharedPreferences.getString("REGISTERDATE", null);
-                UserObj.USER.Points = sharedPreferences.getInt("POINTS", 0);
+                UserObj.USER.setId(sharedPreferences.getInt("ID", 0));
+                UserObj.USER.setLogin(login);
+                UserObj.USER.setEmail(sharedPreferences.getString("EMAIL", null));
+                UserObj.USER.setPassword(sharedPreferences.getString("PASSWORD", null));
+                UserObj.USER.setRegisterDate(sharedPreferences.getString("REGISTERDATE", null));
+                UserObj.USER.setPoints(sharedPreferences.getFloat("POINTS", 0));
 
-                String jsonCheckpoints = sharedPreferences.getString("CHECKPOINTS", null);
-                serializeFromJson(jsonCheckpoints);
+                String jsonUserCheckpoints = sharedPreferences.getString("USER_CHECKPOINTS", null);
+                serializeFromJsonUserCheckpoints(jsonUserCheckpoints);
+
+                String jsonAllCheckpoints = sharedPreferences.getString("CHECKPOINTS", null);
+                serializeFromJsonAllCheckpoints(jsonAllCheckpoints);
+
+                String jsonAppInfo = sharedPreferences.getString("APP_INFO", null);
+                serializeFromJsonAppInfo(jsonAppInfo);
 
                 UserObj.IS_LOGGED = true;
 
@@ -88,28 +104,30 @@ public class LoginSignUpActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        checkLocationCondition();
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         SectionsPagerAdapter(FragmentManager fm) {
-
             super(fm);
         }
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
-
             switch (position) {
-
                 case 0:
                     return new LoginFragment();
-
                 case 1:
                     return new SignUpFragment();
                 default:
                     return null;
             }
         }
-
         @Override
         public int getCount() {
             return 2;
@@ -120,32 +138,110 @@ public class LoginSignUpActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if(UserObj.REMEMBER_LOGIN && UserObj.USER != null) {
+        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("ID", UserObj.USER.ID);
-            editor.putString("LOGIN", UserObj.USER.Login);
-            editor.putString("EMAIL", UserObj.USER.Email);
-            editor.putString("PASSWORD", UserObj.USER.Password);
-            editor.putString("REGISTERDATE", UserObj.USER.RegisterDate);
-            editor.putInt("POINTS", UserObj.USER.Points);
-            editor.putString("CHECKPOINTS", serializeToJson());
+        editor.putString("CHECKPOINTS", serializeToJsonAllCheckpoints());
+
+        if(AppInfoObj.APP_INFO != null) {
+            editor.putString("APP_INFO", serializeToJsonAppInfo());
+        }
+
+        editor.apply();
+
+        if(UserObj.REMEMBER_LOGIN && UserObj.USER != null) {
+            editor.putInt("ID", UserObj.USER.getId());
+            editor.putString("LOGIN", UserObj.USER.getLogin());
+            editor.putString("EMAIL", UserObj.USER.getEmail());
+            editor.putString("PASSWORD", UserObj.USER.getPassword());
+            editor.putString("REGISTERDATE", UserObj.USER.getRegisterDate());
+            editor.putFloat("POINTS", UserObj.USER.getPoints());
+            editor.putString("USER_CHECKPOINTS", serializeToJsonUserCheckpoints());
             editor.apply();
         }
     }
 
-    public String serializeToJson() {
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    //===================================== ArrayList serialization to json ===========================
+    public String serializeToJsonUserCheckpoints() {
         Gson gson = new Gson();
         String jsonCheckpoints = gson.toJson(CheckpointObj.userCheckpointArrayList);
 
         return jsonCheckpoints;
     }
 
-    public void serializeFromJson(String json) {
+    public String serializeToJsonAllCheckpoints() {
+        Gson gson = new Gson();
+        String jsonCheckpoints = gson.toJson(CheckpointObj.checkpointArrayList);
+
+        return jsonCheckpoints;
+    }
+
+    public String serializeToJsonAppInfo() {
+        Gson gson = new Gson();
+        String jsonAppInfo = gson.toJson(AppInfoObj.APP_INFO);
+
+        return  jsonAppInfo;
+    }
+
+    //====================================== ArrayList serialization from json ========================
+
+    public void serializeFromJsonUserCheckpoints(String json) {
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<UserCheckpoint>>(){}.getType();
 
         CheckpointObj.userCheckpointArrayList = gson.fromJson(json, type);
+    }
+
+    public void serializeFromJsonAllCheckpoints(String json) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<Checkpoint>>(){}.getType();
+
+        CheckpointObj.checkpointArrayList = gson.fromJson(json, type);
+    }
+
+    public void serializeFromJsonAppInfo(String json) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<AppInfo>(){}.getType();
+
+        AppInfoObj.APP_INFO = gson.fromJson(json, type);
+    }
+
+    //====================================== Location ==============================================
+
+    public boolean checkAPILevel() {
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            return true;
+        }
+        return false;
+    }
+
+    public void checkLocationCondition() {
+        if(checkAPILevel()) {
+            LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            if( !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
+                locationAlert();
+            }
+        }
+    }
+
+    public void locationAlert() {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setMessage("You will need to turn your location on in order to use the app");
+        builder.setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent viewIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(viewIntent);
+            }
+        });
+        android.support.v7.app.AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

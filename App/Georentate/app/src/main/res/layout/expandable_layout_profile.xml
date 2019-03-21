@@ -13,7 +13,7 @@
         android:layout_margin="5dp"
         android:textColorHint="@color/colorPrimaryDark"
         android:fontFamily="sans-serif-light"
-        android:textColor="@color/colorPrimaryDark"/>
+        android:textColor="@color/primaryText"/>
 
     <TextView
         android:layout_alignParentRight="true"
@@ -21,7 +21,7 @@
         android:layout_margin="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="update"
+        android:text="Atnaujinti"
         android:textAllCaps="true"
         android:textSize="13sp"
         android:fontFamily="sans-serif-light"

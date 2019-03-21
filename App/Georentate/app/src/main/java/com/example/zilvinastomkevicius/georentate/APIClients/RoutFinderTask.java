@@ -17,14 +17,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-//async task for route finding
+/**
+ * Async task for route search
+ */
 
 public class RoutFinderTask extends AsyncTask<String, String, String> {
 
     private MapFragment mMapFragment;
 
     public RoutFinderTask(MapFragment mapFragment) {
-
         mMapFragment = mapFragment;
     }
 
@@ -34,9 +35,7 @@ public class RoutFinderTask extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... uri) {
-
         try {
-
             URL url = new URL(uri[0]);
 
             httpURLConnection = (HttpURLConnection)url.openConnection();
@@ -49,31 +48,28 @@ public class RoutFinderTask extends AsyncTask<String, String, String> {
             String line = "";
 
             while ((line = bufferedReader.readLine()) != null) {
-
                 stringBuffer.append(line);
             }
 
             data = stringBuffer.toString();
             bufferedReader.close();
-
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
 
             e.printStackTrace();
         }
-
         return data;
     }
 
     @Override
     protected void onPostExecute(String s) {
-
         parseRouteInfo(s);
     }
 
-    //parsing gotten data
+    /**
+     * Parsing gotten data
+     * @param result
+     */
     public void parseRouteInfo(String result) {
-
         try {
             JSONObject jsonObject = new JSONObject(result);
             JSONArray jsonArray = jsonObject.getJSONArray("routes").getJSONObject(0)
@@ -101,10 +97,8 @@ public class RoutFinderTask extends AsyncTask<String, String, String> {
 
                 polylineArrayList.add(point);
             }
-
             mMapFragment.drawRoute(polylineArrayList);
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

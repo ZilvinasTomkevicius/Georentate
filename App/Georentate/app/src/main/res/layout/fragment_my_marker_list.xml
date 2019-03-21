@@ -11,6 +11,16 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <TextView
+        android:id="@+id/no_checkpoints_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="Nėra taškų :("
+        android:textColor="@color/colorPrimaryDark"
+        android:fontFamily="sans-serif-light"/>
+
     <ProgressBar
         android:id="@+id/markerList_progressBar"
         android:layout_width="wrap_content"

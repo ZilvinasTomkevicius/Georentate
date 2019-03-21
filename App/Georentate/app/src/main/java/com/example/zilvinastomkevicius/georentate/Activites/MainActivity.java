@@ -3,8 +3,11 @@ package com.example.zilvinastomkevicius.georentate.Activites;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -32,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private Context mContext;
-    private Toolbar toolbar;
+
+    private static boolean FIRST_OPEN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.fragmentContainer);
         tabLayout = findViewById(R.id.mainTabLayout);
-        toolbar = findViewById(R.id.mainToolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Georentate");
 
         sectionsPagerAdapter = new MainActivity.SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int tabColor = ContextCompat.getColor(mContext, R.color.colorPrimary);
+                int tabColor = ContextCompat.getColor(mContext, R.color.colorAccent);
                 tab.getIcon().setColorFilter(tabColor, PorterDuff.Mode.SRC_IN);
             }
 
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        FIRST_OPEN = true;
     }
 
     @Override
@@ -81,19 +84,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.main_toolbar, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
 
             case R.id.mainToolbar_Help :
+               // startActivity(new Intent(MainActivity.this, AboutActivity.class));
                 return true;
 
             case R.id.mainToolbar_Exit :
@@ -124,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 case 4:
                     return new SettingsFragment();
                 default:
-                    return null;
+                    return new MapFragment();
             }
         }
 
@@ -141,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void exitAppAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Exit Georentate?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage("Įšeiti?");
+        builder.setPositiveButton("Taip", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 moveTaskToBack(true);
@@ -151,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Ne", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }

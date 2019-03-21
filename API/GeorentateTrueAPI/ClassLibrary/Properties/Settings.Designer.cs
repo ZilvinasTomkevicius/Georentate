@@ -26,8 +26,9 @@ namespace ClassLibrary.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-KBSOB68;Initial Catalog=GeorentateTrue;Persist Security Info=" +
-            "True;User ID=ZILVINO SA;Password=kompolaidelis12")]
+        [global::System.Configuration.DefaultSettingValueAttribute("workstation id=georentate.mssql.somee.com;packet size=4096;user id=geor_SQLLogin_" +
+            "1;pwd=2q3p4sqtk8;data source=georentate.mssql.somee.com;persist security info=Fa" +
+            "lse;initial catalog=georentate")]
         public string ConnectionString {
             get {
                 return ((string)(this["ConnectionString"]));

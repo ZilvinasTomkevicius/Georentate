@@ -7,7 +7,7 @@
     <TextView
         android:textColor="@color/colorPrimaryDark"
         android:fontFamily="sans-serif-light"
-        android:text="Messaging service is currently under development!"
+        android:text="Žinučių pasaluga kol kas neteikiama!"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

@@ -10,11 +10,13 @@ import android.support.v7.widget.Toolbar;
 
 import com.example.zilvinastomkevicius.georentate.R;
 
+/**
+ * Class for message services
+ */
 public class MessagesFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
         return view;
@@ -25,12 +27,6 @@ public class MessagesFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         if(isVisibleToUser) {
-     //       setToolbarName();
         }
-    }
-
-    public void setToolbarName() {
-        Toolbar toolbar = getActivity().findViewById(R.id.mainToolbar);
-        toolbar.setTitle("Messages");
     }
 }

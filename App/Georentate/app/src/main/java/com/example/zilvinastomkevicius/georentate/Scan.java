@@ -58,9 +58,7 @@ public class Scan {
 
         if(ContextCompat.checkSelfPermission(mContext, CAMERA_PERMISSION ) == PackageManager.PERMISSION_GRANTED) {
             scannerView.startCamera();
-        }
-
-        else {
+        } else {
             ActivityCompat.requestPermissions(mActivity, permissions, CAMER_PERMISSION_REQUEST_CODE);
         }
     }

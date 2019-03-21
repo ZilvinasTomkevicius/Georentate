@@ -1,6 +1,13 @@
 package com.example.zilvinastomkevicius.georentate.Fragments;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,20 +24,28 @@ import com.example.zilvinastomkevicius.georentate.APIClients.LoginSignUpClients;
 import com.example.zilvinastomkevicius.georentate.Entities.User;
 import com.example.zilvinastomkevicius.georentate.R;
 
+/**
+ * A fragment for signup management
+ */
 public class SignUpFragment extends Fragment{
 
     private EditText mLoginInput;
     private EditText mEmailInput;
     private EditText mPasswordInput;
     private EditText mPasswordRepInput;
-    private CheckBox mLoginAfterCheck;
     private Button mSignUpBtn;
     private ProgressBar mProgressBar;
 
     //additional variables
     private LoginSignUpClients loginSignUpClients;
 
-    //------------------------------------------ Overrides ---------------------------------
+    /**
+     * Overrides
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
 
     @Nullable
     @Override
@@ -42,7 +57,6 @@ public class SignUpFragment extends Fragment{
         mEmailInput = view.findViewById(R.id.createEmailInput);
         mPasswordInput = view.findViewById(R.id.createPasswordInput);
         mPasswordRepInput = view.findViewById(R.id.createPasswordInputRep);
-        mLoginAfterCheck = view.findViewById(R.id.loginAfterCheckBox);
         mSignUpBtn = view.findViewById(R.id.signUpBtn);
         mProgressBar = view.findViewById(R.id.signUpProgressBar);
 
@@ -54,63 +68,73 @@ public class SignUpFragment extends Fragment{
         mSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(checkIputs()) {
-                    signUp();
+                if(isNetworkAvailable()) {
+                    if(checkIputs()) {
+                        signUp();
+                    }
+                } else {
+                    networkAlert();
                 }
             }
         });
-
         return view;
     }
 
-    //======================================== sign up on management =========================
+    /**
+     * Signup methods
+     * @return
+     */
 
     public boolean checkIputs() {
-
         if(mLoginInput.getText().toString().equals("")) {
             Toast.makeText(getContext(), "Create login", Toast.LENGTH_SHORT).show();
             return false;
-        }
-
-        else if(mEmailInput.getText().toString().equals("")) {
+        } else if(mEmailInput.getText().toString().equals("")) {
             Toast.makeText(getContext(), "Enter email", Toast.LENGTH_SHORT).show();
             return false;
-        }
-
-        else if(mPasswordInput.getText().toString().equals("")) {
+        } else if(mPasswordInput.getText().toString().equals("")) {
             Toast.makeText(getContext(), "Create password", Toast.LENGTH_SHORT).show();
             return false;
-        }
-
-        else if(mPasswordRepInput.getText().toString().equals("")) {
+        } else if(mPasswordRepInput.getText().toString().equals("")) {
             Toast.makeText(getContext(), "Confirm password", Toast.LENGTH_SHORT).show();
             return false;
-        }
-
-        else if(!mPasswordInput.getText().toString().equals(mPasswordRepInput.getText().toString())) {
+        } else if(!mPasswordInput.getText().toString().equals(mPasswordRepInput.getText().toString())) {
             Toast.makeText(getContext(), "Passwords don't match", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         return true;
     }
 
     public void signUp() {
         User user = new User();
-        user.Login = mLoginInput.getText().toString();
-        user.Email = mEmailInput.getText().toString();
-        user.Password = mPasswordInput.getText().toString();
-
-        boolean loginAfter = false;
-
-        if(mLoginAfterCheck.isChecked()) {
-            loginAfter = true;
-        }
+        user.setLogin(mLoginInput.getText().toString());
+        user.setEmail(mEmailInput.getText().toString());
+        user.setPassword(mPasswordInput.getText().toString());
 
         mProgressBar.setVisibility(View.VISIBLE);
         mSignUpBtn.setText("");
 
-        loginSignUpClients.addUser(user, loginAfter, mProgressBar, mSignUpBtn);
+        loginSignUpClients.addUser(user, mProgressBar, mSignUpBtn);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public void networkAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Turn Wi-Fi ir Mobile Data on");
+        builder.setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent viewIntent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                startActivity(viewIntent);
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

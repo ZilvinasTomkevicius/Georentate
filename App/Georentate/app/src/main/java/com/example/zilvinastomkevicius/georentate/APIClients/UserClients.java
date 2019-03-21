@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zilvinastomkevicius.georentate.Activites.AdminActivity;
@@ -19,6 +20,10 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+/**
+ * A class for user API
+ */
 
 public class UserClients {
 
@@ -88,7 +93,7 @@ public class UserClients {
 
     public void updateUserHandling(Response<Void> response) {
         if(response.code() == RESPONSE_CODE_OK) {
-            updateUserFinished("User info updated!");
+            updateUserFinished("Atnaujinta!");
         }
 
         else if(response.code() == RESPONSE_CODE_INTERNAL_SERVER_ERROR) {
@@ -113,7 +118,8 @@ public class UserClients {
         }
 
         else if(response.code() == RESPONSE_CODE_BAD_GATEWAY) {
-            updateUserFinished("Server went down :(");
+            mContext.startActivity(new Intent(mContext, LoginSignUpActivity.class));
+            ((LaunchingActivity)mContext).finish();
         }
     }
 
@@ -147,10 +153,7 @@ public class UserClients {
     }
 
     public void updateUserWindow() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage("Updating info..");
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        Toast.makeText(mContext, "Naujinama informacija..", Toast.LENGTH_SHORT).show();
     }
 
     public void updateUserFinished(String message) {

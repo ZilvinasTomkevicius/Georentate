@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="Help"
+        android:title="Apie"
         android:id="@+id/mainToolbar_Help"
         app:showAsAction="never">
     </item>
 
     <item
-        android:title="Exit"
+        android:title="Įšeiti"
         android:id="@+id/mainToolbar_Exit"
         app:showAsAction="never">
     </item>

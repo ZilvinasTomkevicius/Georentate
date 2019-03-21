@@ -5,7 +5,6 @@ import com.example.zilvinastomkevicius.georentate.Entities.Checkpoint;
 public class MapObj {
 
     public static float DEFAULT_ZOOM = 15f;
-    public static String CHECKPOINT_LOCATE = "Nearest checkpoint";
 
-    public static Checkpoint DESTINATION_CHECKPOINT;
+    public static boolean ROUTE_ENABLED = false;
 }

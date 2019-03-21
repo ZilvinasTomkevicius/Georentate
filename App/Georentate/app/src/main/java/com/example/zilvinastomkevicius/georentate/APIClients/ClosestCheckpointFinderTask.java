@@ -21,7 +21,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-//Async task for getting info about nearest checkpoints
+/**
+ * Async task for getting info about nearest checkpoints
+ */
 
 public class ClosestCheckpointFinderTask extends AsyncTask<String, String, ArrayList<String>> {
 
@@ -32,22 +34,22 @@ public class ClosestCheckpointFinderTask extends AsyncTask<String, String, Array
     private MapFragment mMapFragment;
 
     public ClosestCheckpointFinderTask(MapFragment mapFragment) {
-
         mMapFragment = mapFragment;
     }
 
+    /**
+     * Request to Google Maps API
+     * @param uri
+     * @return
+     */
     @Override
     protected ArrayList<String> doInBackground(String... uri) {
-
         try {
-
             for(String u : uri) {
-
                 URL url = new URL(u);
 
                 httpURLConnection = (HttpURLConnection)url.openConnection();
                 httpURLConnection.connect();
-
                 inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -55,16 +57,13 @@ public class ClosestCheckpointFinderTask extends AsyncTask<String, String, Array
                 String line = "";
 
                 while ((line = bufferedReader.readLine()) != null) {
-
                     stringBuffer.append(line);
                 }
 
                 data.add(stringBuffer.toString());
                 bufferedReader.close();
             }
-        }
-        catch (IOException e) {
-
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -73,20 +72,19 @@ public class ClosestCheckpointFinderTask extends AsyncTask<String, String, Array
 
     @Override
     protected void onPostExecute(ArrayList<String> s) {
-
         parseRouteInfo(s);
     }
 
-    //Parsing gotten data
+    /**
+     * Parsing gotten data
+     * @param result
+     */
     public void parseRouteInfo(ArrayList<String> result) {
-
         try {
-
             CheckpointObj.CLOSEST_CHECKPOINTS.clear();
             CheckpointObj.CLOSEST_CHECKPOINTS = new ArrayList<>();
 
             for(String r : result) {
-
                 JSONObject jsonObject;
                 JSONObject jsonObject2 = new JSONObject(r);
                 AdditionalCheckInfo additionalCheckInfo = new AdditionalCheckInfo();
@@ -108,11 +106,9 @@ public class ClosestCheckpointFinderTask extends AsyncTask<String, String, Array
 
                 CheckpointObj.CLOSEST_CHECKPOINTS.add(additionalCheckInfo);
             }
-
             mMapFragment.setClosestCheckpointInfo();
         }
         catch (JSONException e) {
-
             e.printStackTrace();
         }
     }

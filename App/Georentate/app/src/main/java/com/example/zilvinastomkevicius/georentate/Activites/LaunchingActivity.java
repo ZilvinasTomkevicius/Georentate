@@ -10,13 +10,17 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.zilvinastomkevicius.georentate.APIClients.AppInfoClients;
 import com.example.zilvinastomkevicius.georentate.APIClients.CheckpointClients;
 import com.example.zilvinastomkevicius.georentate.APIClients.UserClients;
+import com.example.zilvinastomkevicius.georentate.GlobalObjects.CheckpointObj;
+import com.example.zilvinastomkevicius.georentate.GlobalObjects.UserObj;
 import com.example.zilvinastomkevicius.georentate.R;
+import com.example.zilvinastomkevicius.georentate.Update.UpdateGeneralData;
 
 public class LaunchingActivity extends AppCompatActivity {
 
-    private CheckpointClients checkpointClients;
+    private UpdateGeneralData updateGeneralData;
     private UserClients userClients;
 
     @Override
@@ -24,9 +28,11 @@ public class LaunchingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launching);
 
+        /*
         if(!isNetworkAvailable()) {
             networkAlert();
         }
+        */
     }
 
     private boolean isNetworkAvailable() {
@@ -36,25 +42,24 @@ public class LaunchingActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public void networkAlert() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Turn Wi-Fi ir Mobile Data on");
-        builder.setPositiveButton("Turn on", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent viewIntent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                startActivity(viewIntent);
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
     @Override
     public void onResume() {
        super.onResume();
 
-        checkpointClients = new CheckpointClients(this);
-        checkpointClients.getCheckpointList();
+       if(isNetworkAvailable()) {
+           updateGeneralData = new UpdateGeneralData(this);
+           userClients = new UserClients(this);
+           updateGeneralData.getAppInfo();
+           updateGeneralData.getCheckpointList();
+
+           if(UserObj.USER != null && CheckpointObj.userCheckpointArrayList.size() > 0)
+           {
+               updateGeneralData.updateUserCheckpoints(CheckpointObj.userCheckpointArrayList);
+               userClients.updateUser(UserObj.USER);
+           }
+       }
+
+       startActivity(new Intent(LaunchingActivity.this, LoginSignUpActivity.class));
+       finish();
     }
 }

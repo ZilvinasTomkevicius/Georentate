@@ -3,10 +3,14 @@ package com.example.zilvinastomkevicius.georentate.Activites;
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -18,10 +22,13 @@ import android.view.Window;
 
 import com.example.zilvinastomkevicius.georentate.APIClients.CheckpointClients;
 import com.example.zilvinastomkevicius.georentate.Adapters.AddDialogClass;
+import com.example.zilvinastomkevicius.georentate.Adapters.AddSettingsDialogClass;
+import com.example.zilvinastomkevicius.georentate.Adapters.EditSettingsDialogClass;
 import com.example.zilvinastomkevicius.georentate.Adapters.InfoDialogClass;
 import com.example.zilvinastomkevicius.georentate.Entities.Checkpoint;
 import com.example.zilvinastomkevicius.georentate.Entities.User;
 import com.example.zilvinastomkevicius.georentate.Entities.UserCheckpoint;
+import com.example.zilvinastomkevicius.georentate.GlobalObjects.AppInfoObj;
 import com.example.zilvinastomkevicius.georentate.GlobalObjects.CheckpointObj;
 import com.example.zilvinastomkevicius.georentate.GlobalObjects.MapObj;
 import com.example.zilvinastomkevicius.georentate.GlobalObjects.UserObj;
@@ -50,7 +57,8 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
-    private FloatingActionButton floatingActionButton;
+    private FloatingActionButton mLogOffFloatingActionButton;
+    private FloatingActionButton mAddSettingsActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,30 +67,102 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
 
         CheckpointObj.userCheckpointArrayList.clear();
 
-        getLocationPermission();
-
-        floatingActionButton = findViewById(R.id.admin_logoff);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        mLogOffFloatingActionButton = findViewById(R.id.admin_logoff);
+        mAddSettingsActionButton = findViewById(R.id.admin_add_settings);
+        mLogOffFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logOffAlert();
             }
         });
+
+        mAddSettingsActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(AppInfoObj.APP_INFO != null) {
+                    if(AppInfoObj.APP_INFO.PrivacyPolicy != null) {
+                        EditSettingsDialogClass editSettingsDialogClass = new EditSettingsDialogClass(AdminActivity.this);
+                        editSettingsDialogClass.show();
+
+                        Window window = editSettingsDialogClass.getWindow();
+                        window.setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
+                    }
+                }
+                else {
+                    AddSettingsDialogClass addSettingsDialogClass = new AddSettingsDialogClass(AdminActivity.this);
+                    addSettingsDialogClass.show();
+
+                    Window window = addSettingsDialogClass.getWindow();
+                    window.setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT);
+                }
+            }
+        });
+
+     //  checkLocationCondition();
+    }
+
+    public void checkLocationCondition() {
+        if(checkAPILevel()) {
+            LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            if( !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
+                locationAlert();
+            }
+            else {
+                getLocationPermission();
+            }
+        }
+        else {
+            getLocationPermission();
+        }
+    }
+
+    public boolean checkAPILevel() {
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        checkLocationCondition();
+    }
+
+    public void locationAlert() {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setMessage("You will need to turn your location on in order to use the app");
+        builder.setPositiveButton("Įjungti", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent viewIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(viewIntent);
+            }
+        });
+        android.support.v7.app.AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     public void logOffAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Log out?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage("Išeiti?");
+        builder.setPositiveButton("Taip", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 UserObj.LOG_OFF = true;
 
-                CheckpointClients checkpointClients = new CheckpointClients(AdminActivity.this);
-                checkpointClients.getCheckpointList();
+                if(CheckpointObj.NEW_CHECKPOINTS) {
+                    CheckpointClients checkpointClients = new CheckpointClients(AdminActivity.this);
+                    checkpointClients.getCheckpointList();
+                }
+                else {
+                    startActivity(new Intent(AdminActivity.this, LaunchingActivity.class));
+                    finish();
+                }
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Ne", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -94,18 +174,24 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
 
     public void exitAppAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Exit Georentate?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage("Išeiti?");
+        builder.setPositiveButton("Taip", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 UserObj.EXIT_APP = true;
 
-                CheckpointClients checkpointClients = new CheckpointClients(AdminActivity.this);
-                checkpointClients.getCheckpointList();
+                if(CheckpointObj.NEW_CHECKPOINTS) {
+                    CheckpointClients checkpointClients = new CheckpointClients(AdminActivity.this);
+                    checkpointClients.getCheckpointList();
+                }
+                else {
+                    startActivity(new Intent(AdminActivity.this, LaunchingActivity.class));
+                    finish();
+                }
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Ne", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }
@@ -126,14 +212,14 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
         mMap.setOnMarkerClickListener(this);
 
         if (mLocationPermissionGranted) {
-            getDeviceLocation();
+           // getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
 
-            mMap.setMyLocationEnabled(true);
+          //  mMap.setMyLocationEnabled(true);
             setUpCheckpoints();
         }
     }
@@ -141,9 +227,9 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
     public void setUpCheckpoints() {
         for(Checkpoint checkpoint : CheckpointObj.checkpointArrayList) {
             MarkerOptions markerOptions = new MarkerOptions()
-                    .position(new LatLng(checkpoint.Latitude, checkpoint.Longitude))
-                    .snippet(checkpoint.Name)
-                    .title(checkpoint.Name);
+                    .position(new LatLng(checkpoint.getLatitude(), checkpoint.getLongitude()))
+                    .snippet(checkpoint.getName())
+                    .title(checkpoint.getName());
 
             mMap.addMarker(markerOptions);
         }
@@ -153,8 +239,8 @@ public class AdminActivity extends AppCompatActivity implements OnMapReadyCallba
     public boolean onMarkerClick(Marker marker) {
         int id = 0;
         for(Checkpoint checkpoint : CheckpointObj.checkpointArrayList) {
-            if(checkpoint.Name.equals(marker.getTitle())) {
-                id = checkpoint.ID;
+            if(checkpoint.getName().equals(marker.getTitle())) {
+                id = checkpoint.getId();
                 break;
             }
         }

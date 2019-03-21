@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.example.zilvinastomkevicius.georentate.APIClients.CheckpointClients;
 import com.example.zilvinastomkevicius.georentate.Adapters.CheckpointListRecyclerView;
@@ -21,6 +22,9 @@ import com.example.zilvinastomkevicius.georentate.R;
 
 import java.util.Collections;
 
+/**
+ * A class for checkpoint list displaying
+ */
 public class MarkerListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
@@ -28,14 +32,17 @@ public class MarkerListFragment extends Fragment {
     private CheckpointClients checkpointClients;
 
     private ProgressBar progressBar;
+    private TextView mNoCheckpointsText;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_my_marker_list, container, false);
 
         progressBar = view.findViewById(R.id.markerList_progressBar);
         mRecyclerView = view.findViewById(R.id.myMarkerList_recyclerView);
+        mNoCheckpointsText = view.findViewById(R.id.no_checkpoints_text);
+
+        mNoCheckpointsText.setVisibility(View.INVISIBLE);
 
         return view;
     }
@@ -52,12 +59,15 @@ public class MarkerListFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         if(isVisibleToUser) {
-        //    setToolbarName();
             setMarkerListRecyclerView();
         }
     }
 
     public void setMarkerListRecyclerView() {
+        if(CheckpointObj.checkpointArrayList.size() == 0) {
+            mNoCheckpointsText.setVisibility(View.VISIBLE);
+        }
+
         sortMarkerListByID();
         mCheckpointListRecyclerView = new CheckpointListRecyclerView(getContext(), CheckpointObj.checkpointArrayList, CheckpointObj.userCheckpointArrayList);
 
@@ -67,12 +77,8 @@ public class MarkerListFragment extends Fragment {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-    public void setToolbarName() {
-        Toolbar toolbar = getActivity().findViewById(R.id.mainToolbar);
-        toolbar.setTitle("Checkpoint list");
-    }
 
     public void sortMarkerListByID() {
-        Collections.sort(CheckpointObj.checkpointArrayList, (c1, c2) -> c1.ID - c2.ID);
+        Collections.sort(CheckpointObj.checkpointArrayList, (c1, c2) -> c1.getId() - c2.getId());
     }
 }

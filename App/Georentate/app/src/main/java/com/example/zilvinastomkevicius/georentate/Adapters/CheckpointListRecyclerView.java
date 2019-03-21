@@ -24,7 +24,6 @@ public class CheckpointListRecyclerView extends RecyclerView.Adapter<CheckpointL
     private Context mContext;
 
     public CheckpointListRecyclerView(Context context, ArrayList<Checkpoint> checkpointArrayList, ArrayList<UserCheckpoint> userCheckpointArrayList) {
-
         mCheckpointArrayList = checkpointArrayList;
         mUserCheckpointArrayList = userCheckpointArrayList;
         mContext = context;
@@ -32,7 +31,6 @@ public class CheckpointListRecyclerView extends RecyclerView.Adapter<CheckpointL
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.checkpoint_item, parent, false);
 
         return new ViewHolder(view);
@@ -40,24 +38,21 @@ public class CheckpointListRecyclerView extends RecyclerView.Adapter<CheckpointL
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
         final Checkpoint checkpoint = mCheckpointArrayList.get(position);
-        holder.mCheckpointName.setText(checkpoint.Name);
-        holder.mCheckpointPoints.setText(Integer.toString(checkpoint.Points) + " points");
+        holder.mCheckpointName.setText(checkpoint.getName());
+        holder.mCheckpointPoints.setText(Float.toString(checkpoint.getPoints()) + " taškai");
 
         for(UserCheckpoint userCheckpoint : mUserCheckpointArrayList) {
-            if(checkpoint.ID == userCheckpoint.CheckpointID) {
-                if(userCheckpoint.Completed) {
-                    holder.mCheckpointCompletedTextView.setText("Completed");
+            if(checkpoint.getId() == userCheckpoint.getCheckpointID()) {
+                if(userCheckpoint.isCompleted()) {
+                    holder.mCheckpointCompletedTextView.setText("");
                     holder.mCheckpointCompletedTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
-                    holder.mCheckpointCompleted.setColorFilter(mContext.getResources().getColor(R.color.colorAccent));
+                    holder.mCheckpointCompleted.setColorFilter(mContext.getResources().getColor(R.color.colorPrimary));
                     break;
-                }
-
-                else if(!userCheckpoint.Completed) {
-                    holder.mCheckpointCompletedTextView.setText("Not completed");
+                } else if(!userCheckpoint.isCompleted()) {
+                    holder.mCheckpointCompletedTextView.setText("");
                     holder.mCheckpointCompletedTextView.setTextColor(mContext.getResources().getColor(R.color.colorBlack));
-                    holder.mCheckpointCompleted.setColorFilter(mContext.getResources().getColor(R.color.colorBlack));
+                    holder.mCheckpointCompleted.setColorFilter(mContext.getResources().getColor(R.color.secondaryText));
                     break;
                 }
             }

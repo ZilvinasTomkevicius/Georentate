@@ -26,6 +26,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ *A class for login/signup API
+ */
+
 public class LoginSignUpClients {
 
     private static final int RESPONSE_CODE_OK = 200;
@@ -35,13 +39,20 @@ public class LoginSignUpClients {
     private Context mContext;
     private boolean swith = false;
     private CheckpointClients checkpointClients;
+    private AppInfoClients appInfoClients;
 
     public LoginSignUpClients(Context context) {
         mContext = context;
         checkpointClients = new CheckpointClients(mContext);
+        appInfoClients = new AppInfoClients(mContext);
     }
 
-    //---------------------------------- Clients -------------------------------------------
+    /**
+     * Clients
+     * @param user
+     * @param progressBar
+     * @param button
+     */
 
     public void logOn(final User user, final ProgressBar progressBar, final Button button) {
         RetrofitFactoryInterface retrofitFactoryInterface = RetrofitFactoryClass.Create();
@@ -55,25 +66,23 @@ public class LoginSignUpClients {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
                 if(!swith) {
                     button.setText("Login");
                     progressBar.setVisibility(View.INVISIBLE);
                 }
-
-                Toast.makeText(mContext, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                message("Error: ");
             }
         });
     }
 
-    public void addUser(final User user, final boolean loginAfter, final ProgressBar progressBar, final Button button) {
+    public void addUser(final User user, final ProgressBar progressBar, final Button button) {
         RetrofitFactoryInterface retrofitFactoryInterface = RetrofitFactoryClass.Create();
         Call<Integer> call = retrofitFactoryInterface.addUser(user);
 
         call.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
-                addUserHandling(response, progressBar, button, user, loginAfter);
+                addUserHandling(response, progressBar, button, user);
             }
 
             @Override
@@ -81,71 +90,65 @@ public class LoginSignUpClients {
                 button.setText("Sign up");
                 progressBar.setVisibility(View.INVISIBLE);
 
-                Toast.makeText(mContext, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                message("Error: ");
             }
         });
     }
 
-    //--------------------------------- Response handling ------------------------------------------
+    /**
+     * Response handling
+     * @param response
+     * @param button
+     * @param progressBar
+     */
 
     public void loginHandling(Response<User> response, Button button, ProgressBar progressBar) {
         if(response.code() == RESPONSE_CODE_OK) {
-            User user1 = response.body();
+            User user1 = new User(response.body().getId(), response.body().getLogin(), response.body().getPassword(), response.body().getEmail(),
+                    response.body().getRegisterDate(), response.body().getPoints());
+
             if(user1 != null) {
-                if(user1.Login != null && user1.Password != null) {
+                if(user1.getLogin() != null && user1.getPassword() != null) {
                     UserObj.USER = new User();
                     UserObj.USER = user1;
                     UserObj.IS_LOGGED = true;
 
-                    checkpointClients.getUserCheckpoints(UserObj.USER.ID, progressBar, button, swith);
-                }
-
-                else {
-                    Toast.makeText(mContext, "Wrong email or password", Toast.LENGTH_SHORT).show();
+                    checkpointClients.getUserCheckpoints(UserObj.USER.getId(), progressBar, button, swith);
+                } else {
+                    message("Wrong email or password");
                     button.setText("Login");
                     progressBar.setVisibility(View.INVISIBLE);
                 }
-            }
-
-            else {
-                Toast.makeText(mContext, "Bad request", Toast.LENGTH_SHORT).show();
+            } else {
+                message("Bad request");
                 button.setText("Login");
                 progressBar.setVisibility(View.INVISIBLE);
             }
-        }
-
-        else if(response.code() == RESPONSE_CODE_INTERNAL_SERVER_ERROR) {
-            Toast.makeText(mContext, "Something wrong inside the server", Toast.LENGTH_SHORT).show();
-        }
-
-        else if(response.code() == RESPONSE_CODE_BAD_GATEWAY) {
-            Toast.makeText(mContext, "No connection to the server", Toast.LENGTH_SHORT).show();
+        } else if(response.code() == RESPONSE_CODE_INTERNAL_SERVER_ERROR) {
+            message("Something wrong inside the server");
+        } else if(response.code() == RESPONSE_CODE_BAD_GATEWAY) {
+            message("No connection to the server");
         }
     }
 
-    public void addUserHandling(Response<Integer> response, ProgressBar progressBar, Button button, User user, boolean loginAfter) {
+    public void addUserHandling(Response<Integer> response, ProgressBar progressBar, Button button, User user) {
         if(response.code() == RESPONSE_CODE_OK) {
-            checkpointClients.addUserCheckpoints(setUpUserCheckpoints(response.body()), progressBar, button);
+            User user1 = new User();
+            user1.setLogin(user.getLogin());
+            user1.setPassword(user.getPassword());
+            user1.setPoints(0);
 
-            if(loginAfter) {
-                swith = true;
+            checkpointClients.addUserCheckpoints(setUpUserCheckpoints(response.body()), progressBar, button, user1);
 
-                User user1 = new User();
-                user1.Login = user.Login;
-                user1.Password = user.Password;
-
-                logOn(user1, progressBar, button);
+            if(CheckpointObj.checkpointArrayList.size() == 0) {
+                checkpointClients.getCheckpointList();
             }
-        }
-
-        else if(response.code() == RESPONSE_CODE_INTERNAL_SERVER_ERROR) {
-            Toast.makeText(mContext, "The user already exists", Toast.LENGTH_SHORT).show();
+        } else if(response.code() == RESPONSE_CODE_INTERNAL_SERVER_ERROR) {
+            message("The user already exists");
             button.setText("Sign up");
             progressBar.setVisibility(View.INVISIBLE);
-        }
-
-        else if(response.code() == RESPONSE_CODE_BAD_GATEWAY) {
-            Toast.makeText(mContext, "No connection to the server", Toast.LENGTH_SHORT).show();
+        } else if(response.code() == RESPONSE_CODE_BAD_GATEWAY) {
+            message("No connection to the server");
             button.setText("Sign up");
             progressBar.setVisibility(View.INVISIBLE);
         }
@@ -156,13 +159,16 @@ public class LoginSignUpClients {
 
         for(Checkpoint checkpoint : CheckpointObj.checkpointArrayList) {
             UserCheckpoint userCheckpoint = new UserCheckpoint();
-            userCheckpoint.UserID = id;
-            userCheckpoint.CheckpointID = checkpoint.ID;
-            userCheckpoint.Completed = false;
+            userCheckpoint.setUserID(id);
+            userCheckpoint.setCheckpointID(checkpoint.getId());
+            userCheckpoint.setCompleted(false);
 
             userCheckpoints.add(userCheckpoint);
         }
-
         return userCheckpoints;
+    }
+
+    public void message(String message) {
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 }

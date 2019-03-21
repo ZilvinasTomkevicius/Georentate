@@ -3,6 +3,10 @@ package com.example.zilvinastomkevicius.georentate.APIClients;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ *A factory class for retrofit initialization
+ */
+
 public class RetrofitFactoryClass {
 
     public static RetrofitFactoryInterface Create() {

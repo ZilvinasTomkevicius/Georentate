@@ -32,14 +32,28 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/admin_logoff"
+    <LinearLayout
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        app:backgroundTint="@color/colorPrimaryDark"
-        android:layout_margin="15dp"
-        android:src="@drawable/ic_exit_to_app_black_24dp"/>
+        android:orientation="vertical"
+        android:layout_margin="15dp">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/admin_add_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_settings_black_24dp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_marginTop="15dp"
+            android:id="@+id/admin_logoff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/colorPrimaryDark"
+            android:src="@drawable/ic_exit_to_app_black_24dp"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

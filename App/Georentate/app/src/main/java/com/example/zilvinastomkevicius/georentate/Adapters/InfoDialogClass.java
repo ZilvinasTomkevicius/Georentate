@@ -72,21 +72,21 @@ public class InfoDialogClass extends Dialog implements android.view.View.OnClick
 
     public void setCheckpointInfo() {
         for(Checkpoint checkpoint : CheckpointObj.checkpointArrayList) {
-            if(checkpoint.ID == mID) {
-                mCheckpointName.setText(checkpoint.Name);
-                mCheckpointHint.setText(checkpoint.Hint);
-                mCheckpointScanString.setText(checkpoint.Scan);
-                mCheckpointPoints.setText(Integer.toString(checkpoint.Points));
+            if(checkpoint.getId() == mID) {
+                mCheckpointName.setText(checkpoint.getName());
+                mCheckpointHint.setText(checkpoint.getHint());
+                mCheckpointScanString.setText(checkpoint.getScan());
+                mCheckpointPoints.setText(Float.toString(checkpoint.getPoints()));
 
                 mCheckpoint = new Checkpoint();
-                mCheckpoint.ID = mID;
-                mCheckpoint.Name = mCheckpointName.getText().toString();
-                mCheckpoint.Hint = mCheckpointHint.getText().toString();
-                mCheckpoint.Scan = mCheckpointScanString.getText().toString();
-                mCheckpoint.Points = Integer.parseInt(mCheckpointPoints.getText().toString());
+                mCheckpoint.setId(mID);
+                mCheckpoint.setName(mCheckpointName.getText().toString());
+                mCheckpoint.setHint(mCheckpointHint.getText().toString());
+                mCheckpoint.setScan(mCheckpointScanString.getText().toString());
+                mCheckpoint.setPoints(Integer.parseInt(mCheckpointPoints.getText().toString()));
                 LatLng latLng = mMarker.getPosition();
-                mCheckpoint.Latitude = latLng.latitude;
-                mCheckpoint.Longitude = latLng.longitude;
+                mCheckpoint.setLatitude(latLng.latitude);
+                mCheckpoint.setLongitude(latLng.longitude);
 
                 break;
             }
@@ -95,15 +95,15 @@ public class InfoDialogClass extends Dialog implements android.view.View.OnClick
 
     public void deleteAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Are you sure?");
-        builder.setPositiveButton("Yes", new OnClickListener() {
+        builder.setMessage("Tikrai ištrinti?");
+        builder.setPositiveButton("Taip", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mMarker.remove();
                 deleteCheckpoint();
             }
         });
-        builder.setNegativeButton("No", new OnClickListener() {
+        builder.setNegativeButton("Ne", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

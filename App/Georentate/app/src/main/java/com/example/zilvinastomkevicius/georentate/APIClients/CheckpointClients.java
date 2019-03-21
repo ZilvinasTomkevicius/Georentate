@@ -31,6 +31,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ *A class for Checkpoint API
+ */
+
 public class CheckpointClients {
 
     private static final int RESPONSE_CODE_OK = 200;
@@ -44,6 +48,7 @@ public class CheckpointClients {
     }
 
     public void addCheckpoint(Checkpoint checkpoint) {
+        updatingCheckpoint("Pridedama..");
         RetrofitFactoryInterface retrofitFactoryInterface = RetrofitFactoryClass.Create();
         Call<Void> call = retrofitFactoryInterface.addCheckpoint(checkpoint);
 
@@ -61,6 +66,7 @@ public class CheckpointClients {
     }
 
     public void updateCheckpoint(Checkpoint checkpoint) {
+        updatingCheckpoint("Naujinama..");
         RetrofitFactoryInterface retrofitFactoryInterface = RetrofitFactoryClass.Create();
         Call<Void> call = retrofitFactoryInterface.updateCheckpoint(checkpoint);
 
@@ -78,6 +84,7 @@ public class CheckpointClients {
     }
 
     public void deleteCheckpoint(int Id) {
+        updatingCheckpoint("Trinama..");
         RetrofitFactoryInterface retrofitFactoryInterface = RetrofitFactoryClass.Create();
         Call<Void> call = retrofitFactoryInterface.deleteCheckpoint(Id);
 
@@ -95,6 +102,7 @@ public class CheckpointClients {
     }
 
     public void getCheckpointList() {
+        /*
         RetrofitFactoryInterface retrofitFactoryInterface = RetrofitFactoryClass.Create();
         Call<ArrayList<Checkpoint>> call = retrofitFactoryInterface.getCheckpointList();
 
@@ -109,16 +117,17 @@ public class CheckpointClients {
                 Toast.makeText(mContext, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+        */
     }
 
-    public void addUserCheckpoints(ArrayList<UserCheckpoint> userCheckpoints, final ProgressBar progressBar, final Button button) {
+    public void addUserCheckpoints(ArrayList<UserCheckpoint> userCheckpoints, final ProgressBar progressBar, final Button button, final User user) {
         RetrofitFactoryInterface retrofitFactoryInterface = RetrofitFactoryClass.Create();
         Call<Void> call = retrofitFactoryInterface.addUserCheckpoints(userCheckpoints);
 
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                addUserCheckpointsHandling(response, progressBar, button);
+                addUserCheckpointsHandling(response, progressBar, button, user);
             }
 
             @Override
@@ -162,7 +171,10 @@ public class CheckpointClients {
         });
     }
 
-    //======================================== Handling ================================
+    /**
+     * Responses handling
+     * @param response
+     */
 
     public void addCheckpointHandling(Response<Void> response) {
         if(response.code() == RESPONSE_CODE_OK) {
@@ -224,7 +236,8 @@ public class CheckpointClients {
         }
 
         else if(response.code() == RESPONSE_CODE_BAD_GATEWAY) {
-            noConnectionAlert();
+            UserClients userClients = new UserClients(mContext);
+            userClients.getUserList();
         }
     }
 
@@ -234,8 +247,8 @@ public class CheckpointClients {
 
         for(String name : CheckpointObj.newCheckpointList) {
             for(Checkpoint checkpoint : CheckpointObj.checkpointArrayList) {
-                if(name.equals(checkpoint.Name)) {
-                    newCheckpointIDs.add(checkpoint.ID);
+                if(name.equals(checkpoint.getName())) {
+                    newCheckpointIDs.add(checkpoint.getId());
                     break;
                 }
             }
@@ -243,9 +256,9 @@ public class CheckpointClients {
         for(Integer id : newCheckpointIDs) {
             for(User user : UserObj.userArrayList) {
                 UserCheckpoint userCheckpoint = new UserCheckpoint();
-                userCheckpoint.CheckpointID = id;
-                userCheckpoint.UserID = user.ID;
-                userCheckpoint.Completed = false;
+                userCheckpoint.setCheckpointID(id);
+                userCheckpoint.setUserID(user.getId());
+                userCheckpoint.setCompleted(false);
                 CheckpointObj.userCheckpointArrayList.add(userCheckpoint);
             }
         }
@@ -254,12 +267,15 @@ public class CheckpointClients {
         userClients.addNewUserCheckpoints(CheckpointObj.userCheckpointArrayList);
     }
 
-    public void addUserCheckpointsHandling(Response<Void> response, ProgressBar progressBar, Button button) {
+    public void addUserCheckpointsHandling(Response<Void> response, ProgressBar progressBar, Button button, User user) {
         if(response.code() == RESPONSE_CODE_OK) {
             Toast.makeText(mContext, "Succesfuly signed up!", Toast.LENGTH_SHORT).show();
 
             button.setText("Sign up");
             progressBar.setVisibility(View.INVISIBLE);
+
+            LoginSignUpClients loginSignUpClients = new LoginSignUpClients(mContext);
+            loginSignUpClients.logOn(user, progressBar, button);
         }
 
         else if(response.code() == RESPONSE_CODE_INTERNAL_SERVER_ERROR) {
@@ -307,6 +323,10 @@ public class CheckpointClients {
         }
     }
 
+    /**
+     * Alerts
+     */
+
     public void noConnectionAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setMessage("Application server is currently down :(");
@@ -332,5 +352,9 @@ public class CheckpointClients {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public void updatingCheckpoint(String message) {
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 }
